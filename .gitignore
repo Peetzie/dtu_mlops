@@ -156,3 +156,6 @@ node_modules/
 latest_info.csv
 latest_repo_data.csv
 repo_data.csv
+
+data/
+/data
