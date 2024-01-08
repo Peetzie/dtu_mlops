@@ -35,16 +35,16 @@ codebase should probably be different.
 ## Cookiecutter
 
 We are in this course going to use the tool [cookiecutter](https://cookiecutter.readthedocs.io/en/latest/README.html),
-which is tool for creating projects from *project templates*. A project template is in short ust a overall structure of
+which is tool for creating projects from *project templates*. A project template is in short just na overall structure of
 how you want your folders, files etc. to be organised from the beginning. For this course we are going to be using a
 custom [MLOps template](https://github.com/SkafteNicki/mlops_template). The template is essentially a fork of the
 [cookiecutter data science template](https://github.com/drivendata/cookiecutter-data-science) template that has been
 used for a couple of years in the course, but specialized a bit more towards MLOps instead of general data science.
 
-We are not going to argue that this template is better than everyother template, we are just focusing that it is a
+We are not going to argue that this template is better than every other template, we are just focusing on that it is a
 **standardized** way of creating project structures for machine learning projects. By standardized we mean, that if two
 persons are both using `cookiecutter` with the same template, the layout of their code does follow some specific rules,
-making one able to faster get understand the other persons code. Code organization is therefore not only to make the
+enabling one to faster understand the other person's code. Code organization is therefore not only to make the
 code easier for you to maintain but also for others to read and understand.
 
 Below is seen the default code structure of cookiecutter for data science projects.
@@ -60,14 +60,13 @@ that are missing.
 
 ## Python projects
 
-While the same template in principal could be used regardless of what language we where using for our machine learning
+While the same template in principal could be used regardless of what language we were using for our machine learning
 or data science application, there are certain considerations to take into account based on what language we are using.
-Python is the dominant language for machine learning and data science currently, which is why we in this section is
+Python is the dominant language for machine learning and data science currently, which is why we in this section are
 focusing on some of the special files you will need for your Python projects.
 
 The first file you may or may not know is the `__init__.py` file. In Python the `__init__.py` file is used to mark a
 directory as a Python package. Therefore as a bare minimum, any Python package should look something like this:
-package should look something like this
 
 ```txt
 ├── src/
@@ -109,7 +108,7 @@ a lot of projects using `setup.py + setup.cfg` so it is good to at least know ab
     dependencies = {file = ["requirements.txt"]}
     ```
 
-    the `[build-section]` informs `pip`/`python` that to build this Python project it needs the two packages
+    the `[build-system]` informs `pip`/`python` that to build this Python project it needs the two packages
     `setuptools` and `wheels` and that it should call the
     [setuptools.build_meta](https://setuptools.pypa.io/en/latest/build_meta.html) function to actually build the
     project. The `[project]` section essentially contains metadata regarding the package, what its called etc. if we
@@ -138,7 +137,7 @@ a lot of projects using `setup.py + setup.cfg` so it is good to at least know ab
     ruff_option = ...
     ```
 
-    To read more about how specify `pyproject.toml` this
+    To read more about how to specify `pyproject.toml` this
     [page](https://packaging.python.org/en/latest/specifications/declaring-project-metadata/#declaring-project-metadata)
     is a good place to start.
 
@@ -223,7 +222,19 @@ in this way paths (for saving and loading files) are always relative to the root
     1. If you feel like the template can be improve in some way, feel free to either open a issue with the proposed
         improvement or directly send a pull request to the repository 😄.
 
-    You do this by running the cookiecutter command using the template url.
+    You do this by running the cookiecutter command using the template url:
+
+    ```bash
+    cookiecutter <url-to-template>
+    ```
+
+    !!! note "Valid project names"
+
+        When asked for a project name you should follow the
+        [PEP8](https://peps.python.org/pep-0008/#package-and-module-names) guidelines for naming packages. This means
+        that the name should be all lowercase and if you want to separate words, you should use underscores. For example
+        `my_project` is a valid name, while `MyProject` is not. Additionally, the packaage name cannot start with a
+        number.
 
     ??? note "Flat-layout vs src-layout"
 
@@ -242,9 +253,10 @@ in this way paths (for saving and loading files) are always relative to the root
     ```
 
 4. Start by filling out the `<project_name>/data/make_dataset.py` file. When this file runs, it should take the raw
-    data e.g. the corrupted MNIST files from yesterday which now should be located in a `data/raw` folder and process
-    them into a single tensor, normalize the tensor and save this intermediate representation to the `data/processed`
-    folder. By normalization here we refer to making sure the images have mean 0 and standard deviation 1.
+    data e.g. the corrupted MNIST files from yesterday (`../data/corruptmnist`) which now should be located in a
+    `data/raw` folder and process them into a single tensor, normalize the tensor and save this intermediate
+    representation to the `data/processed` folder. By normalization here we refer to making sure the images have mean 0
+    and standard deviation 1.
 
 5. This template comes with a `Makefile` that can be used to easily define common operations in a project. You do not
     have to understand the complete file but try taking a look at it. In particular the following commands may come in
@@ -253,7 +265,7 @@ in this way paths (for saving and loading files) are always relative to the root
     ```bash
     make data  # runs the make_dataset.py file, try it!
     make clean  # clean __pycache__ files
-    make requirements  # install everything in the requirements.py file
+    make requirements  # install everything in the requirements.txt file
     ```
 
     ??? note "Windows users"
@@ -310,7 +322,7 @@ in this way paths (for saving and loading files) are always relative to the root
     code (see [this set of exercises](../s1_development_environment/package_manager.md) for help)
 
 14. (Optional) Lets say that you are not satisfied with the template I have recommended that you use, which is
-    completely fine. What should you then do? You should ofcause create your own template! This is actually not that
+    completely fine. What should you then do? You should of course create your own template! This is actually not that
     hard to do.
 
     1. Just for a starting point I would recommend that you fork either the
@@ -354,6 +366,41 @@ in this way paths (for saving and loading files) are always relative to the root
         ```bash
         cookiecutter https://github.com/<username>/<my_template_repo>
         ```
+
+## 🧠 Knowledge check
+
+1. Starting from complete scratch, what is the steps needed to create a new github repository and push a specific
+    template to it as the very first commit.
+
+    ??? success "Solution"
+
+        1. Create a completely barebone repository, either using the GitHub UI or if you have the github cli installed
+            (not `git`) you can run
+
+            ```bash
+            gh repo create <repo_name> --public --confirm
+            ```
+
+        2. Run `cookiecutter` with the template you want to use
+
+            ```bash
+            cookiecutter <template>
+            ```
+
+            The name of the folder created by `cookiecutter` should be the same as <repo_name> you just used.
+
+        3. Run the following sequence of commands
+
+            ```bash
+            cd <project_name>
+            git init
+            git add .
+            git commit -m "Initial commit"
+            git remote add origin https://github.com/<username>/<repo_name>
+            git push origin master
+            ```
+
+        That's it. The template should now have been pushed to the repository as the first commit.
 
 That ends the module on code structure and `cookiecutter`. We again want to stress the point of using `cookiecutter`
 is not about following one specific template, but instead just to use any template for organizing your code. What often
