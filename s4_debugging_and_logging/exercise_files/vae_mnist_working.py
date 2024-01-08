@@ -11,7 +11,12 @@ from torch.utils.data import Dataset
 from torchvision.datasets import MNIST
 import cProfile
 import pstats
+import wandb
 from torchvision.utils import save_image
+
+# Initialize your WANDB project
+wandb.init(project="vae_mnist_project", entity="s174159")
+
 
 # Model Hyperparameters
 dataset_path = "datasets"
@@ -170,6 +175,7 @@ def train_model():
             x_hat, mean, log_var = model(x)
             loss = loss_function(x, x_hat, mean, log_var)
             overall_loss += loss.item()
+            wandb.log({"Training loss": loss.item()})
             loss.backward()
             optimizer.step()
         print(

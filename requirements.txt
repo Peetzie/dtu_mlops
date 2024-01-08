@@ -22,3 +22,4 @@ pandas
 numpy
 scipy
 dvc
+rich

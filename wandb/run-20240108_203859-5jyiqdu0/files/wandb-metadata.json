@@ -1,0 +1,100 @@
+{
+    "os": "Linux-6.2.0-39-generic-x86_64-with-glibc2.17",
+    "python": "3.8.18",
+    "heartbeatAt": "2024-01-08T19:39:00.021086",
+    "startedAt": "2024-01-08T19:38:59.266554",
+    "docker": null,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "s4_debugging_and_logging/exercise_files/vae_mnist_working.py",
+    "codePathLocal": "s4_debugging_and_logging/exercise_files/vae_mnist_working.py",
+    "codePath": "s4_debugging_and_logging/exercise_files/vae_mnist_working.py",
+    "git": {
+        "remote": "git@github.com:Peetzie/dtu_mlops.git",
+        "commit": "8d533cdbcf7fad35716b3debe124f7cc0ba7eab2"
+    },
+    "email": "s174159@student.dtu.dk",
+    "root": "/home/peetz/Documents/GitHub/dtu_mlops",
+    "host": "PeetzLenovo",
+    "username": "peetz",
+    "executable": "/home/peetz/miniconda3/envs/s23/bin/python",
+    "cpu_count": 6,
+    "cpu_count_logical": 12,
+    "cpu_freq": {
+        "current": 3.2135,
+        "min": 1200.0,
+        "max": 3300.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 4.042,
+            "min": 1200.0,
+            "max": 3300.0
+        },
+        {
+            "current": 1.2,
+            "min": 1200.0,
+            "max": 3300.0
+        },
+        {
+            "current": 3.638,
+            "min": 1200.0,
+            "max": 3300.0
+        },
+        {
+            "current": 3.396,
+            "min": 1200.0,
+            "max": 3300.0
+        },
+        {
+            "current": 4.042,
+            "min": 1200.0,
+            "max": 3300.0
+        },
+        {
+            "current": 4.041,
+            "min": 1200.0,
+            "max": 3300.0
+        },
+        {
+            "current": 3.882,
+            "min": 1200.0,
+            "max": 3300.0
+        },
+        {
+            "current": 3.973,
+            "min": 1200.0,
+            "max": 3300.0
+        },
+        {
+            "current": 3.353,
+            "min": 1200.0,
+            "max": 3300.0
+        },
+        {
+            "current": 3.963,
+            "min": 1200.0,
+            "max": 3300.0
+        },
+        {
+            "current": 4.026,
+            "min": 1200.0,
+            "max": 3300.0
+        },
+        {
+            "current": 3.3,
+            "min": 1200.0,
+            "max": 3300.0
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 467.8895797729492,
+            "used": 334.9957580566406
+        }
+    },
+    "memory": {
+        "total": 13.49285888671875
+    }
+}
