@@ -7,12 +7,21 @@ import torch.nn as nn
 import torchvision.transforms as transforms
 from torch.optim import Adam
 from torch.utils.data import DataLoader
+from torch.utils.data import Dataset
 from torchvision.datasets import MNIST
+import cProfile
+import pstats
 from torchvision.utils import save_image
 
 # Model Hyperparameters
 dataset_path = "datasets"
-device_name = "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"
+device_name = (
+    "cuda"
+    if torch.cuda.is_available()
+    else "mps"
+    if torch.backends.mps.is_available()
+    else "cpu"
+)
 DEVICE = torch.device(device_name)
 batch_size = 100
 x_dim = 784
@@ -22,14 +31,48 @@ lr = 1e-3
 epochs = 5
 
 
+class CustomMNISTDataset(Dataset):
+    """
+    Custom MNIST dataset that returns the image as a vector rather than a 2D array. Therefor essentially loading the dataset as a tensor.
+    """
+
+    def __init__(self, mnist_dataset):
+        self.mnist_dataset = mnist_dataset
+
+    def __len__(self):
+        return len(self.mnist_dataset)
+
+    def __getitem__(self, idx):
+        x, _ = self.mnist_dataset[idx]
+        x = x.view(x_dim).to(DEVICE)  # Reshape and move to device
+        return x
+
+
 # Data loading
 mnist_transform = transforms.Compose([transforms.ToTensor()])
 
-train_dataset = MNIST(dataset_path, transform=mnist_transform, train=True, download=True)
-test_dataset = MNIST(dataset_path, transform=mnist_transform, train=False, download=True)
+train_dataset = MNIST(
+    dataset_path, transform=mnist_transform, train=True, download=True
+)
+test_dataset = MNIST(
+    dataset_path, transform=mnist_transform, train=False, download=True
+)
 
-train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
-test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False)
+# Create custom datasets
+train_custom_dataset = CustomMNISTDataset(train_dataset)
+test_custom_dataset = CustomMNISTDataset(test_dataset)
+
+# Use the custom datasets with DataLoader
+train_loader = DataLoader(
+    train_custom_dataset,
+    batch_size=batch_size,
+    shuffle=True,
+)
+test_loader = DataLoader(
+    test_custom_dataset,
+    batch_size=batch_size,
+    shuffle=False,
+)
 
 
 class Encoder(nn.Module):
@@ -117,42 +160,40 @@ def loss_function(x, x_hat, mean, log_var):
 optimizer = Adam(model.parameters(), lr=lr)
 
 
-print("Start training VAE...")
-model.train()
-for epoch in range(epochs):
-    overall_loss = 0
-    for batch_idx, (x, _) in enumerate(train_loader):
-        if batch_idx % 100 == 0:
-            print(batch_idx)
-        x = x.view(batch_size, x_dim)
-        x = x.to(DEVICE)
+def train_model():
+    print("Start training VAE...")
+    model.train()
+    for epoch in range(epochs):
+        overall_loss = 0
+        for batch_idx, x in enumerate(train_loader):
+            optimizer.zero_grad()
+            x_hat, mean, log_var = model(x)
+            loss = loss_function(x, x_hat, mean, log_var)
+            overall_loss += loss.item()
+            loss.backward()
+            optimizer.step()
+        print(
+            "\tEpoch",
+            epoch + 1,
+            "complete!",
+            "\tAverage Loss: ",
+            overall_loss / (batch_idx * batch_size),
+        )
+    print("Finish!!")
 
-        optimizer.zero_grad()
 
-        x_hat, mean, log_var = model(x)
-        loss = loss_function(x, x_hat, mean, log_var)
+# Profiling the training
+cProfile.run("train_model()", "profiling_stats")
 
-        overall_loss += loss.item()
+# Analyzing the profiling data
+p = pstats.Stats("profiling_stats")
+p.sort_stats("cumulative").print_stats(10)
 
-        loss.backward()
-        optimizer.step()
-    print(
-        "\tEpoch",
-        epoch + 1,
-        "complete!",
-        "\tAverage Loss: ",
-        overall_loss / (batch_idx * batch_size),
-    )
-print("Finish!!")
 
 # Generate reconstructions
 model.eval()
 with torch.no_grad():
-    for batch_idx, (x, _) in enumerate(test_loader):
-        if batch_idx % 100 == 0:
-            print(batch_idx)
-        x = x.view(batch_size, x_dim)
-        x = x.to(DEVICE)
+    for batch_idx, x in enumerate(test_loader):
         x_hat, _, _ = model(x)
         break
 
