@@ -3,11 +3,13 @@
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v3.2.0
+    exclude:
+    -
     hooks:
     -   id: trailing-whitespace
     -   id: end-of-file-fixer
+        exclude: ^\.gitignore$
     -   id: check-yaml
     -   id: check-added-large-files
     -   id: double-quote-string-fixer
     -   id: detect-private-key
-    

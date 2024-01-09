@@ -20,15 +20,15 @@ sys.path.append(model_dir)
 logger_configurator = LoggerConfigurator('s5_CI')
 logger = logger_configurator.get_logger()
 
-print(model_dir)
 from model import MNISTModel
 
-model = MNISTModel(in_features=28 * 28, out_features=10)
+batch_size = 64
+model = MNISTModel(batch_size)
 
 
 def test_error_on_wrong_shape():
-    with pytest.raises(ValueError, match='Extected input to be a 3D tensor'):
-        input_shape = torch.Size([1, 2, 3, 4])
+    with pytest.raises(ValueError, match='Extected input to be a 4D tensor'):
+        input_shape = torch.Size([1, 2, 3])
         # Create a test input
         test_input = torch.randn(input_shape)
         # Get model output
@@ -36,9 +36,9 @@ def test_error_on_wrong_shape():
 
 
 def test_error_dimensions():
-    expected_message = re.escape('Expected each sample to have shape [1,28,28]')
+    expected_message = re.escape('Expected each sample to have shape [64,1,28,28]')
     with pytest.raises(ValueError, match=expected_message):
-        input_shape = torch.Size([3, 2, 3])
+        input_shape = torch.Size([2, 1, 1, 1])
         # Create a test input
         test_input = torch.randn(input_shape)
         # Get model output
@@ -46,8 +46,8 @@ def test_error_dimensions():
 
 
 def test_model():
-    input_shape = torch.Size([1, 28, 28])
-    expected_output_shape = torch.Size([1, 10])
+    input_shape = torch.Size([64, 1, 28, 28])
+    expected_output_shape = torch.Size([64, 10])
 
     # Create a test input
     test_input = torch.randn(input_shape)
@@ -63,4 +63,4 @@ def test_model():
 if __name__ == '__main__':
     test_error_on_wrong_shape()
     test_error_dimensions()
-    # test_model()
+    test_model()

@@ -27,7 +27,7 @@ def train():
         monitor='val_loss', patience=3, verbose=True, mode='min'
     )
 
-    model = MNISTModel(in_features=28 * 28, out_features=10)  # LigningModule
+    model = MNISTModel()  # LigningModule
     trainer = Trainer(
         logger=WandbLogger(project='dtu_mlops'),
         max_epochs=30,
@@ -38,4 +38,4 @@ def train():
 
 
 if __name__ == '__main__':
-    cli()
+    train()

@@ -21,7 +21,7 @@ logger = logger_configurator.get_logger()
 
 def test_training_loss_decreases():
     # Initialize the model
-    model = MNISTModel(in_features=28 * 28, out_features=10, test=True)
+    model = MNISTModel(test=True)
 
     # Initialize a trainer with limited epochs for testing
     trainer = pl.Trainer(max_epochs=4, logger=False)

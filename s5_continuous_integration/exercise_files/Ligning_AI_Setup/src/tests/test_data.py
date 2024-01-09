@@ -24,9 +24,7 @@ train_dataset = FMNIST(train=True)
 test_dataset = FMNIST(train=False)
 
 
-@pytest.mark.skipif(
-    train_dataset is None or train_dataset is None, reason='Files not found'
-)
+@pytest.mark.skipif(not os.path.exists('data/raw'), reason='Data files not found')
 def test_data_pytest():
     test_data()
 
@@ -47,8 +45,12 @@ def test_data():
                     f'Label point shape mismatch: Expected {expected_shape_label}, got {labels.shape}'
                 )
 
-    expected_shape_1 = torch.Size([28, 28])
-    expected_shape_2 = torch.Size([784])
+    expected_shape_1 = torch.Size([1, 28, 28])
+    expected_shape_2 = torch.Size(
+        [
+            784,
+        ]
+    )
     # Choose the expected shape based on your dataset format
     check_shape(
         train_dataset, expected_shape_1, expected_shape_2
