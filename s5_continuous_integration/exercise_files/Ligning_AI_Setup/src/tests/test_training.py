@@ -10,12 +10,12 @@ script_dir = os.path.dirname(__file__)
 # Go up to project dir
 project_dir = os.path.dirname(script_dir)
 # Add data dir to sys path
-model_dir = os.path.join(project_dir, "models")
+model_dir = os.path.join(project_dir, 'models')
 sys.path.append(model_dir)
 
 from model import MNISTModel
 
-logger_configurator = LoggerConfigurator("s5_CI")
+logger_configurator = LoggerConfigurator('s5_CI')
 logger = logger_configurator.get_logger()
 
 
@@ -28,14 +28,14 @@ def test_training_loss_decreases():
 
     # Train the model
     trainer.fit(model)
-    initial_loss = float("inf")
+    initial_loss = float('inf')
 
-    loss_values = model.metrics["epoch_loss"]
+    loss_values = model.metrics['epoch_loss']
     # Check if the loss decreased
     assert loss_values[-1] < initial_loss, logger.error(
-        "Training error did not decrease"
+        'Training error did not decrease'
     )
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     test_training_loss_decreases()

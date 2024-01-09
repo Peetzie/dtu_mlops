@@ -13,21 +13,21 @@ from sklearn import datasets
 
 app = FastAPI()
 
-classes = ["Iris-Setosa", "Iris-Versicolour", "Iris-Virginica"]
-with open("model.pkl", "rb") as file:
+classes = ['Iris-Setosa', 'Iris-Versicolour', 'Iris-Virginica']
+with open('model.pkl', 'rb') as file:
     model = pickle.load(file)
 
 
-@app.post("/iris_v1/")
+@app.post('/iris_v1/')
 def iris_inference_v1(sepal_length: float, sepal_width: float, petal_length: float, petal_width: float):
     """Version 1 of the iris inference endpoint."""
     prediction = model.predict([[sepal_length, sepal_width, petal_length, petal_width]])
     prediction = prediction.item()
-    return {"prediction": classes[prediction], "prediction_int": prediction}
+    return {'prediction': classes[prediction], 'prediction_int': prediction}
 
 
-with open("prediction_database.csv", "w") as file:
-    file.write("time, sepal_length, sepal_width, petal_length, petal_width, prediction\n")
+with open('prediction_database.csv', 'w') as file:
+    file.write('time, sepal_length, sepal_width, petal_length, petal_width, prediction\n')
 
 
 def add_to_database(
@@ -39,11 +39,11 @@ def add_to_database(
     prediction: int,
 ):
     """Simple function to add prediction to database."""
-    with open("prediction_database.csv", "a") as file:
-        file.write(f"{now}, {sepal_length}, {sepal_width}, {petal_length}, {petal_width}, {prediction}\n")
+    with open('prediction_database.csv', 'a') as file:
+        file.write(f'{now}, {sepal_length}, {sepal_width}, {petal_length}, {petal_width}, {prediction}\n')
 
 
-@app.post("/iris_v2/")
+@app.post('/iris_v2/')
 async def iris_inference_v2(
     sepal_length: float,
     sepal_width: float,
@@ -66,13 +66,13 @@ async def iris_inference_v2(
         prediction,
     )
 
-    return {"prediction": classes[prediction], "prediction_int": prediction}
+    return {'prediction': classes[prediction], 'prediction_int': prediction}
 
 
-@app.get("/iris_monitoring/", response_class=HTMLResponse)
+@app.get('/iris_monitoring/', response_class=HTMLResponse)
 async def iris_monitoring():
     """Simple get request method that returns a monitoring report."""
-    iris_frame = datasets.load_iris(as_frame="auto").frame
+    iris_frame = datasets.load_iris(as_frame='auto').frame
 
     data_drift_report = Report(
         metrics=[
@@ -87,9 +87,9 @@ async def iris_monitoring():
         reference_data=iris_frame.iloc[60:],
         column_mapping=None,
     )
-    data_drift_report.save_html("monitoring.html")
+    data_drift_report.save_html('monitoring.html')
 
-    with open("monitoring.html", "r", encoding="utf-8") as f:
+    with open('monitoring.html', 'r', encoding='utf-8') as f:
         html_content = f.read()
 
     return HTMLResponse(content=html_content, status_code=200)

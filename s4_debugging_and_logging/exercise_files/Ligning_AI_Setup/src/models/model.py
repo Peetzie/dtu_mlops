@@ -33,9 +33,9 @@ class MNISTModel(LightningModule):
         preds = self(data)
         loss = self.criterion(preds, target)
         acc = (target == preds.argmax(dim=-1)).float().mean()
-        self.log("train_loss", loss)
-        self.log("train_acc", acc)
-        self.logger.experiment.log({"logits": (preds)})
+        self.log('train_loss', loss)
+        self.log('train_acc', acc)
+        self.logger.experiment.log({'logits': (preds)})
         return loss
 
     def validation_step(self, batch, batch_idx):
@@ -43,9 +43,9 @@ class MNISTModel(LightningModule):
         preds = self(data)
         loss = self.criterion(preds, target)
         acc = (target == preds.argmax(dim=-1)).float().mean()
-        self.log("val_loss", loss)
-        self.log("val_acc", acc)
-        return {"val_loss": loss, "val_acc": acc}
+        self.log('val_loss', loss)
+        self.log('val_acc', acc)
+        return {'val_loss': loss, 'val_acc': acc}
 
     def configure_optimizers(self) -> OptimizerLRScheduler:
         return optim.Adam(self.parameters(), lr=1e-2)

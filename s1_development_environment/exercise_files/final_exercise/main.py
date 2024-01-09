@@ -12,10 +12,10 @@ def cli():
 
 
 @click.command()
-@click.option("--lr", default=1e-3, help="learning rate to use for training")
+@click.option('--lr', default=1e-3, help='learning rate to use for training')
 def train(lr):
     """Train a model on MNIST."""
-    print("Training day and night")
+    print('Training day and night')
     print(lr)
 
     # TODO: Implement training loop here
@@ -24,10 +24,10 @@ def train(lr):
 
 
 @click.command()
-@click.argument("model_checkpoint")
+@click.argument('model_checkpoint')
 def evaluate(model_checkpoint):
     """Evaluate a trained model."""
-    print("Evaluating like my life dependends on it")
+    print('Evaluating like my life dependends on it')
     print(model_checkpoint)
 
     # TODO: Implement evaluation logic here
@@ -39,5 +39,5 @@ cli.add_command(train)
 cli.add_command(evaluate)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     cli()

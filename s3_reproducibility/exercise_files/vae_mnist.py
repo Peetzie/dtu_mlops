@@ -14,9 +14,9 @@ from torchvision.datasets import MNIST
 from torchvision.utils import save_image
 
 # Model Hyperparameters
-dataset_path = "~/datasets"
+dataset_path = '~/datasets'
 cuda = True
-DEVICE = torch.device("cuda" if cuda else "cpu")
+DEVICE = torch.device('cuda' if cuda else 'cpu')
 batch_size = 100
 x_dim = 784
 hidden_dim = 400
@@ -46,7 +46,7 @@ model = Model(Encoder=encoder, Decoder=decoder).to(DEVICE)
 
 def loss_function(x, x_hat, mean, log_var):
     """Elbo loss function."""
-    reproduction_loss = nn.functional.binary_cross_entropy(x_hat, x, reduction="sum")
+    reproduction_loss = nn.functional.binary_cross_entropy(x_hat, x, reduction='sum')
     kld = -0.5 * torch.sum(1 + log_var - mean.pow(2) - log_var.exp())
     return reproduction_loss + kld
 
@@ -54,7 +54,7 @@ def loss_function(x, x_hat, mean, log_var):
 optimizer = Adam(model.parameters(), lr=lr)
 
 
-print("Start training VAE...")
+print('Start training VAE...')
 model.train()
 for epoch in range(epochs):
     overall_loss = 0
@@ -74,12 +74,12 @@ for epoch in range(epochs):
         loss.backward()
         optimizer.step()
     print(
-        f"Epoch {epoch+1} complete!,  Average Loss: {overall_loss / (batch_idx*batch_size)}"
+        f'Epoch {epoch+1} complete!,  Average Loss: {overall_loss / (batch_idx*batch_size)}'
     )
-print("Finish!!")
+print('Finish!!')
 
 # save weights
-torch.save(model, f"{os.getcwd()}/trained_model.pt")
+torch.save(model, f'{os.getcwd()}/trained_model.pt')
 
 # Generate reconstructions
 model.eval()
@@ -92,12 +92,12 @@ with torch.no_grad():
         x_hat, _, _ = model(x)
         break
 
-save_image(x.view(batch_size, 1, 28, 28), "orig_data.png")
-save_image(x_hat.view(batch_size, 1, 28, 28), "reconstructions.png")
+save_image(x.view(batch_size, 1, 28, 28), 'orig_data.png')
+save_image(x_hat.view(batch_size, 1, 28, 28), 'reconstructions.png')
 
 # Generate samples
 with torch.no_grad():
     noise = torch.randn(batch_size, latent_dim).to(DEVICE)
     generated_images = decoder(noise)
 
-save_image(generated_images.view(batch_size, 1, 28, 28), "generated_sample.png")
+save_image(generated_images.view(batch_size, 1, 28, 28), 'generated_sample.png')

@@ -3,7 +3,7 @@ from torch import nn
 from torchvision import models
 
 # TODO: add more
-backbones = ["resnet18"]
+backbones = ['resnet18']
 
 
 class EnsembleModel(nn.Module):

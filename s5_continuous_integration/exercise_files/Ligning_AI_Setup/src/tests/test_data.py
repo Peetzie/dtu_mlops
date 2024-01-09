@@ -11,21 +11,21 @@ script_dir = os.path.dirname(__file__)
 project_dir = os.path.dirname(script_dir)
 
 # Add data dir to sys path
-data_dir = os.path.join(project_dir, "data")
+data_dir = os.path.join(project_dir, 'data')
 sys.path.append(data_dir)
 
 # Now import FMNIST dataloader
 from make_dataset import FMNIST
 
 
-logger_configurator = LoggerConfigurator("s5_CI")
+logger_configurator = LoggerConfigurator('s5_CI')
 logger = logger_configurator.get_logger()
 train_dataset = FMNIST(train=True)
 test_dataset = FMNIST(train=False)
 
 
 @pytest.mark.skipif(
-    train_dataset is None or train_dataset is None, reason="Files not found"
+    train_dataset is None or train_dataset is None, reason='Files not found'
 )
 def test_data_pytest():
     test_data()
@@ -39,12 +39,12 @@ def test_data():
     def check_shape(dataset, expected_shape_img, expected_shape_label=None):
         for data, labels in dataset:
             assert data.shape == expected_shape_img, logger.error(
-                f"Data point shape mismatch: Expected {expected_shape_img}, got {data.shape}"
+                f'Data point shape mismatch: Expected {expected_shape_img}, got {data.shape}'
             )
 
             if not expected_shape_label:
                 assert labels.shape == expected_shape_2, logger.error(
-                    f"Label point shape mismatch: Expected {expected_shape_label}, got {labels.shape}"
+                    f'Label point shape mismatch: Expected {expected_shape_label}, got {labels.shape}'
                 )
 
     expected_shape_1 = torch.Size([28, 28])
@@ -57,11 +57,11 @@ def test_data():
     def check_labels(dataset):
         for data, labels in dataset:
             assert labels < 10, logger.error(
-                f"Label value mismatch: Expected label < 10, got {labels}"
+                f'Label value mismatch: Expected label < 10, got {labels}'
             )
 
     check_labels(train_dataset)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     test_data_pytest()

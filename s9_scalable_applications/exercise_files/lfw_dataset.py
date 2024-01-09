@@ -25,14 +25,14 @@ class LFWDataset(Dataset):
         return self.transform(img)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("-path_to_folder", default="", type=str)
-    parser.add_argument("-batch_size", default=512, type=int)
-    parser.add_argument("-num_workers", default=None, type=int)
-    parser.add_argument("-visualize_batch", action="store_true")
-    parser.add_argument("-get_timing", action="store_true")
-    parser.add_argument("-batches_to_check", default=100, type=int)
+    parser.add_argument('-path_to_folder', default='', type=str)
+    parser.add_argument('-batch_size', default=512, type=int)
+    parser.add_argument('-num_workers', default=None, type=int)
+    parser.add_argument('-visualize_batch', action='store_true')
+    parser.add_argument('-get_timing', action='store_true')
+    parser.add_argument('-batches_to_check', default=100, type=int)
 
     args = parser.parse_args()
 
@@ -61,4 +61,4 @@ if __name__ == "__main__":
             res.append(end - start)
 
         res = np.array(res)
-        print("Timing: {np.mean(res)}+-{np.std(res)}")
+        print('Timing: {np.mean(res)}+-{np.std(res)}')

@@ -12,9 +12,9 @@ from torchvision.datasets import MNIST
 from torchvision.utils import save_image
 
 # Model Hyperparameters
-dataset_path = "datasets"
+dataset_path = 'datasets'
 cuda = False
-DEVICE = torch.device("cuda" if cuda else "cpu")
+DEVICE = torch.device('cuda' if cuda else 'cpu')
 batch_size = 100
 x_dim = 784
 hidden_dim = 400
@@ -108,19 +108,19 @@ BCE_loss = nn.BCELoss()
 
 def loss_function(x, x_hat, mean, log_var):
     """ELBO loss function."""
-    reproduction_loss = nn.functional.binary_cross_entropy(x_hat, x, reduction="sum")
+    reproduction_loss = nn.functional.binary_cross_entropy(x_hat, x, reduction='sum')
     kld = -0.5 * torch.sum(1 + log_var - mean.pow(2) - log_var.exp())
     return reproduction_loss + kld
 
 
 optimizer = Adam(model.parameters(), lr=lr)
 
-print("Start training VAE...")
+print('Start training VAE...')
 model.train()
 for epoch in range(epochs):
     with torch.profiler.profile(
         schedule=torch.profiler.schedule(wait=2, warmup=2, active=6, repeat=1),
-        on_trace_ready=torch.profiler.tensorboard_trace_handler("profiler"),
+        on_trace_ready=torch.profiler.tensorboard_trace_handler('profiler'),
         with_stack=True,
     ) as profiler:
         overall_loss = 0
@@ -133,24 +133,24 @@ for epoch in range(epochs):
             optimizer.zero_grad()
 
             x_hat, mean, log_var = model(x)
-            with record_function("model_loss"):
+            with record_function('model_loss'):
                 loss = loss_function(x, x_hat, mean, log_var)
 
             overall_loss += loss.item()
 
-            with record_function("backward"):
+            with record_function('backward'):
                 loss.backward()
                 optimizer.step()
             profiler.step()
 
         print(
-            "\tEpoch",
+            '\tEpoch',
             epoch + 1,
-            "complete!",
-            "\tAverage Loss: ",
+            'complete!',
+            '\tAverage Loss: ',
             overall_loss / (batch_idx * batch_size),
         )
-print("Finish!!")
+print('Finish!!')
 
 # Generate reconstructions
 model.eval()
@@ -163,12 +163,12 @@ with torch.no_grad():
         x_hat, _, _ = model(x)
         break
 
-save_image(x.view(batch_size, 1, 28, 28), "orig_data.png")
-save_image(x_hat.view(batch_size, 1, 28, 28), "reconstructions.png")
+save_image(x.view(batch_size, 1, 28, 28), 'orig_data.png')
+save_image(x_hat.view(batch_size, 1, 28, 28), 'reconstructions.png')
 
 # Generate samples
 with torch.no_grad():
     noise = torch.randn(batch_size, latent_dim).to(DEVICE)
     generated_images = decoder(noise)
 
-save_image(generated_images.view(batch_size, 1, 28, 28), "generated_sample.png")
+save_image(generated_images.view(batch_size, 1, 28, 28), 'generated_sample.png')

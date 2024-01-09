@@ -24,5 +24,5 @@ knn.predict(iris_x_test)
 
 # save model
 
-with open("model.pkl", "wb") as file:
+with open('model.pkl', 'wb') as file:
     pickle.dump(knn, file)

@@ -5,22 +5,22 @@ import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
 from torchvision.datasets import FashionMNIST
 
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
 
 def output_label(label):
     """Convert output label to corresponding text label."""
     output_mapping = {
-        0: "T-shirt/Top",
-        1: "Trouser",
-        2: "Pullover",
-        3: "Dress",
-        4: "Coat",
-        5: "Sandal",
-        6: "Shirt",
-        7: "Sneaker",
-        8: "Bag",
-        9: "Ankle Boot",
+        0: 'T-shirt/Top',
+        1: 'Trouser',
+        2: 'Pullover',
+        3: 'Dress',
+        4: 'Coat',
+        5: 'Sandal',
+        6: 'Shirt',
+        7: 'Sneaker',
+        8: 'Bag',
+        9: 'Ankle Boot',
     }
     label = label.item() if type(label) == torch.Tensor else label
     return output_mapping[label]
@@ -67,13 +67,13 @@ class FashionCNN(nn.Module):
 def train_and_test():
     """Train and test the model."""
     train_set = FashionMNIST(
-        "",
+        '',
         train=True,
         download=True,
         transform=transforms.Compose([transforms.ToTensor()]),
     )
     test_set = FashionMNIST(
-        "",
+        '',
         train=False,
         download=True,
         transform=transforms.Compose([transforms.ToTensor()]),
@@ -144,7 +144,7 @@ def train_and_test():
                 accuracy_list.append(accuracy)
 
             if not (count % 500):
-                print("Iteration: {}, Loss: {}, Accuracy: {}%".format(count, loss.data, accuracy))
+                print('Iteration: {}, Loss: {}, Accuracy: {}%'.format(count, loss.data, accuracy))
 
     class_correct = [0.0 for _ in range(10)]
     total_correct = [0.0 for _ in range(10)]
@@ -162,8 +162,8 @@ def train_and_test():
                 total_correct[label] += 1
 
     for i in range(10):
-        print("Accuracy of {}: {:.2f}%".format(output_label(i), class_correct[i] * 100 / total_correct[i]))
+        print('Accuracy of {}: {:.2f}%'.format(output_label(i), class_correct[i] * 100 / total_correct[i]))
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     train_and_test()

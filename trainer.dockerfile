@@ -20,4 +20,4 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 RUN pip install . --no-deps --no-cache-dir
 
 # Ensure with -u that prints are redirected to the overlaying OS term and not contained in the docker logs
-ENTRYPOINT ["python", "-u", "src/train_model.py", "train"] 
+ENTRYPOINT ["python", "-u", "src/train_model.py", "train"]

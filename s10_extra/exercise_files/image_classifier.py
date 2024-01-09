@@ -30,7 +30,7 @@ class LitClassifier(LightningModule):
         x, y = batch
         y_hat = self(x)
         loss = nn.functional.cross_entropy(y_hat, y)
-        self.log("train_loss", loss, on_epoch=True)
+        self.log('train_loss', loss, on_epoch=True)
         return loss
 
     def validation_step(self, batch, batch_idx):
@@ -38,14 +38,14 @@ class LitClassifier(LightningModule):
         x, y = batch
         y_hat = self(x)
         loss = nn.functional.cross_entropy(y_hat, y)
-        self.log("valid_loss", loss, on_step=True)
+        self.log('valid_loss', loss, on_step=True)
 
     def test_step(self, batch, batch_idx):
         """Test step."""
         x, y = batch
         y_hat = self(x)
         loss = nn.functional.cross_entropy(y_hat, y)
-        self.log("test_loss", loss)
+        self.log('test_loss', loss)
 
     def configure_optimizers(self):
         """Configure the optimizer."""
@@ -57,8 +57,8 @@ class MyDataModule(LightningDataModule):
 
     def __init__(self, batch_size: int = 32):
         super().__init__()
-        dataset = MNIST("Datasets", train=True, download=True, transform=transforms.ToTensor())
-        self.mnist_test = MNIST("Datasets", train=False, download=True, transform=transforms.ToTensor())
+        dataset = MNIST('Datasets', train=True, download=True, transform=transforms.ToTensor())
+        self.mnist_test = MNIST('Datasets', train=False, download=True, transform=transforms.ToTensor())
         self.mnist_train, self.mnist_val = random_split(dataset, [55000, 5000])
         self.batch_size = batch_size
 
@@ -89,8 +89,8 @@ def cli_main():
         run=False,
     )
     cli.trainer.fit(cli.model, datamodule=cli.datamodule)
-    cli.trainer.test(ckpt_path="best", datamodule=cli.datamodule)
+    cli.trainer.test(ckpt_path='best', datamodule=cli.datamodule)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     cli_main()

@@ -8,13 +8,13 @@ np.random.seed(123)
 OPTUNA = False
 
 data = datasets.load_digits()
-X, y = data["data"], data["target"]
+X, y = data['data'], data['target']
 N = X.shape[0]
-print(f"Datamatrix size {X.shape}. Label size {y.shape}")
+print(f'Datamatrix size {X.shape}. Label size {y.shape}')
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1)
-print(f"Train shape: {X_train.shape}, {y_train.shape}")
-print(f"Test shape: {X_test.shape}, {y_test.shape}")
+print(f'Train shape: {X_train.shape}, {y_train.shape}')
+print(f'Test shape: {X_test.shape}, {y_test.shape}')
 
 if not OPTUNA:
     kf = KFold(n_splits=5)
@@ -25,7 +25,7 @@ if not OPTUNA:
     kf = KFold(n_splits=5)
 
     # we are going to do a full grid search
-    params = ParameterGrid({"n_estimators": N_ESTIMATORS, "max_depth": MAX_DEPTH})
+    params = ParameterGrid({'n_estimators': N_ESTIMATORS, 'max_depth': MAX_DEPTH})
 
     scores = []
     for p in params:
@@ -47,13 +47,13 @@ if not OPTUNA:
     scores_std = [np.std(s) for s in scores]
 
     idx = np.argmax(scores_mean)
-    print(f"Best parameter combination: {params[idx]}")
+    print(f'Best parameter combination: {params[idx]}')
     classifier = RandomForestClassifier(**params[idx])
     classifier.fit(X_train, y_train)
 
     preds = classifier.predict(X_test)
     final_acc = accuracy_score(y_test, preds)
-    print(f"Final score to report: {final_acc}")
+    print(f'Final score to report: {final_acc}')
 
 ##################### Here starts the exercise #####################
 else:

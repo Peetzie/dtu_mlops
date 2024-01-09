@@ -15,17 +15,17 @@ import wandb
 from torchvision.utils import save_image
 
 # Initialize your WANDB project
-wandb.init(project="vae_mnist_project", entity="s174159")
+wandb.init(project='vae_mnist_project', entity='s174159')
 
 
 # Model Hyperparameters
-dataset_path = "datasets"
+dataset_path = 'datasets'
 device_name = (
-    "cuda"
+    'cuda'
     if torch.cuda.is_available()
-    else "mps"
+    else 'mps'
     if torch.backends.mps.is_available()
-    else "cpu"
+    else 'cpu'
 )
 DEVICE = torch.device(device_name)
 batch_size = 100
@@ -157,7 +157,7 @@ BCE_loss = nn.BCELoss()
 
 def loss_function(x, x_hat, mean, log_var):
     """Reconstruction + KL divergence losses summed over all elements and batch."""
-    reproduction_loss = nn.functional.binary_cross_entropy(x_hat, x, reduction="sum")
+    reproduction_loss = nn.functional.binary_cross_entropy(x_hat, x, reduction='sum')
     kld = -0.5 * torch.sum(1 + log_var - mean.pow(2) - log_var.exp())
     return reproduction_loss + kld
 
@@ -166,7 +166,7 @@ optimizer = Adam(model.parameters(), lr=lr)
 
 
 def train_model():
-    print("Start training VAE...")
+    print('Start training VAE...')
     model.train()
     for epoch in range(epochs):
         overall_loss = 0
@@ -175,25 +175,25 @@ def train_model():
             x_hat, mean, log_var = model(x)
             loss = loss_function(x, x_hat, mean, log_var)
             overall_loss += loss.item()
-            wandb.log({"Training loss": loss.item()})
+            wandb.log({'Training loss': loss.item()})
             loss.backward()
             optimizer.step()
         print(
-            "\tEpoch",
+            '\tEpoch',
             epoch + 1,
-            "complete!",
-            "\tAverage Loss: ",
+            'complete!',
+            '\tAverage Loss: ',
             overall_loss / (batch_idx * batch_size),
         )
-    print("Finish!!")
+    print('Finish!!')
 
 
 # Profiling the training
-cProfile.run("train_model()", "profiling_stats")
+cProfile.run('train_model()', 'profiling_stats')
 
 # Analyzing the profiling data
-p = pstats.Stats("profiling_stats")
-p.sort_stats("cumulative").print_stats(10)
+p = pstats.Stats('profiling_stats')
+p.sort_stats('cumulative').print_stats(10)
 
 
 # Generate reconstructions
@@ -203,12 +203,12 @@ with torch.no_grad():
         x_hat, _, _ = model(x)
         break
 
-save_image(x.view(batch_size, 1, 28, 28), "orig_data.png")
-save_image(x_hat.view(batch_size, 1, 28, 28), "reconstructions.png")
+save_image(x.view(batch_size, 1, 28, 28), 'orig_data.png')
+save_image(x_hat.view(batch_size, 1, 28, 28), 'reconstructions.png')
 
 # Generate samples
 with torch.no_grad():
     noise = torch.randn(batch_size, latent_dim).to(DEVICE)
     generated_images = decoder(noise)
 
-save_image(generated_images.view(batch_size, 1, 28, 28), "generated_sample.png")
+save_image(generated_images.view(batch_size, 1, 28, 28), 'generated_sample.png')

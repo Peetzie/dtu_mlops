@@ -24,7 +24,7 @@ class LeNet(nn.Module):
         return x
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     model = LeNet()
 
     # print all the parameters of the model

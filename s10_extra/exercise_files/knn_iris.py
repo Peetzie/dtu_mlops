@@ -21,8 +21,8 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y, test_size=
 
 pipeline = Pipeline(
     [
-        ("scaler", StandardScaler()),
-        ("knn", KNeighborsClassifier(n_neighbors=n_neighbors)),
+        ('scaler', StandardScaler()),
+        ('knn', KNeighborsClassifier(n_neighbors=n_neighbors)),
     ]
 )
 
@@ -33,10 +33,10 @@ pipeline.fit(X_train, y_train)
 predictions = pipeline.predict(X_test)
 
 # save model
-dump(pipeline, "model.joblib")
+dump(pipeline, 'model.joblib')
 
 # load model
-pipeline = load("model.joblib")
+pipeline = load('model.joblib')
 
 _, ax = plt.subplots()
 DecisionBoundaryDisplay.from_estimator(
@@ -44,14 +44,14 @@ DecisionBoundaryDisplay.from_estimator(
     X,
     alpha=0.8,
     ax=ax,
-    response_method="predict",
-    plot_method="pcolormesh",
-    shading="auto",
+    response_method='predict',
+    plot_method='pcolormesh',
+    shading='auto',
 )
-plt.scatter(X[:, 0], X[:, 1], c=y, edgecolor="k", s=20)
+plt.scatter(X[:, 0], X[:, 1], c=y, edgecolor='k', s=20)
 
 # hyper parameter optimization
-parameters = {"knn__n_neighbors": list(range(1, 10))}
+parameters = {'knn__n_neighbors': list(range(1, 10))}
 hyper_pipeline = GridSearchCV(pipeline, parameters)
 hyper_pipeline.fit(X_train, y_train)
 print(hyper_pipeline.best_params_)

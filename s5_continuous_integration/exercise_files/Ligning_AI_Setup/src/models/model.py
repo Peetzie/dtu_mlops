@@ -16,7 +16,7 @@ script_dir = os.path.dirname(__file__)
 project_dir = os.path.dirname(script_dir)
 
 # Add data dir to sys path
-data_dir = os.path.join(project_dir, "data")
+data_dir = os.path.join(project_dir, 'data')
 sys.path.append(data_dir)
 
 # Now import FMNIST dataloader
@@ -34,13 +34,13 @@ class MNISTModel(LightningModule):
         self.criterion = nn.CrossEntropyLoss()
         self.test = test
         if self.test:
-            self.metrics = {"loss": [], "epoch_loss": []}  # Testing metrics
+            self.metrics = {'loss': [], 'epoch_loss': []}  # Testing metrics
 
     def forward(self, x: torch.Tensor):
         if x.ndim != 3:  # Bach, width, height (3D tesor)
-            raise ValueError("Extected input to be a 3D tensor")
+            raise ValueError('Extected input to be a 3D tensor')
         if x.shape[0] != 1 or x.shape[1] != 28 or x.shape[2] != 28:
-            raise ValueError("Expected each sample to have shape [1,28,28]")
+            raise ValueError('Expected each sample to have shape [1,28,28]')
         # make sure input tensor is flattened
         x = x.view(x.shape[0], -1)
 
@@ -56,28 +56,28 @@ class MNISTModel(LightningModule):
         preds = self(data)
         loss = self.criterion(preds, target)
         acc = (target == preds.argmax(dim=-1)).float().mean()
-        self.log("train_loss", loss)
-        self.log("train_acc", acc)
+        self.log('train_loss', loss)
+        self.log('train_acc', acc)
         if self.logger:
-            self.logger.experiment.log({"logits": (preds)})
+            self.logger.experiment.log({'logits': (preds)})
         if self.test:
-            self.metrics["loss"].append(loss.item())
+            self.metrics['loss'].append(loss.item())
         return loss
 
     def on_train_epoch_end(self):
         if self.test:
-            avg = np.mean(self.metrics["loss"])
-            self.metrics["epoch_loss"].append(avg)
-            self.metrics["loss"] = []
+            avg = np.mean(self.metrics['loss'])
+            self.metrics['epoch_loss'].append(avg)
+            self.metrics['loss'] = []
 
     def validation_step(self, batch, batch_idx):
         data, target = batch
         preds = self(data)
         loss = self.criterion(preds, target)
         acc = (target == preds.argmax(dim=-1)).float().mean()
-        self.log("val_loss", loss)
-        self.log("val_acc", acc)
-        return {"val_loss": loss, "val_acc": acc}
+        self.log('val_loss', loss)
+        self.log('val_acc', acc)
+        return {'val_loss': loss, 'val_acc': acc}
 
     def configure_optimizers(self) -> OptimizerLRScheduler:
         return optim.Adam(self.parameters(), lr=1e-2)

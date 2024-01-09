@@ -23,9 +23,9 @@ class YourDataset(Dataset):
 
 def main():
     """Main function for running the distributed example."""
-    parser = ArgumentParser("DDP usage example")
+    parser = ArgumentParser('DDP usage example')
     # you need this argument in your scripts for DDP to work
-    parser.add_argument("--local_rank", type=int, default=-1, metavar="N", help="Local process rank.")
+    parser.add_argument('--local_rank', type=int, default=-1, metavar='N', help='Local process rank.')
     args = parser.parse_args()
 
     # keep track of whether the current process is the `master` process
@@ -38,14 +38,14 @@ def main():
     # initialize PyTorch distributed using environment variables (you could also do this more explicitly by specifying
     # `rank` and `world_size`, but I find using environment variables makes it so that you can easily use the same
     # script on different machines)
-    dist.init_process_group(backend="nccl", init_method="env://")
+    dist.init_process_group(backend='nccl', init_method='env://')
     torch.cuda.set_device(args.local_rank)
 
     # set the seed for all GPUs (also make sure to set the seed for random, numpy, etc.)
     torch.cuda.manual_seed_all(SEED)
 
     # initialize your model (BERT in this example)
-    model = BertForMaskedLM.from_pretrained("bert-base-uncased")
+    model = BertForMaskedLM.from_pretrained('bert-base-uncased')
 
     # send your model to GPU
     model = model.to(args.device)
@@ -83,5 +83,5 @@ def main():
             # etc.
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
