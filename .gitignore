@@ -160,3 +160,6 @@ repo_data.csv
 data/
 /data
 /datasets
+
+lightning_logs/
+checkpoints/
