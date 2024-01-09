@@ -59,7 +59,7 @@ class MNISTModel(LightningModule):
     def forward(self, x: torch.Tensor):
         if x.ndim != 4:  # Bach, width, height (3D tesor)
             raise ValueError('Extected input to be a 4D tensor')
-        if x.shape[0] != self.batch_size or x.shape[2] != 28 or x.shape[3] != 28:
+        if x.shape[1] != 1 or x.shape[2] != 28 or x.shape[3] != 28:
             raise ValueError('Expected each sample to have shape [64,1,28,28]')
         return self.classifier(self.conv(x))
 
@@ -97,10 +97,17 @@ class MNISTModel(LightningModule):
         return optim.Adam(self.parameters(), lr=1e-4)
 
     def train_dataloader(self):
-        return DataLoader(FMNIST(train=True), batch_size=self.batch_size, shuffle=True)
+        return DataLoader(
+            FMNIST(train=True), batch_size=self.batch_size, shuffle=True, num_workers=11
+        )
 
     def test_dataloader(self):
-        return DataLoader(FMNIST(train=False), batch_size=self.batch_size, shuffle=True)
+        return DataLoader(
+            FMNIST(train=False),
+            batch_size=self.batch_size,
+            shuffle=True,
+            num_workers=11,
+        )
 
 
 if __name__ == '__main__':
