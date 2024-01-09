@@ -180,6 +180,14 @@ in the future as you start to add more and more features. As subgoals, please fu
 2. Implement your data setup in a script called `data.py`. The data was saved using `torch.save`, so to load it you
     should use `torch.load`.
 
+    !!! warning "Saving the model"
+
+        When saving the model, you should use `torch.save(model.state_dict(), "model.pt")` and when loading the model
+        you should use `model.load_state_dict(torch.load("model.pt"))`. If you do `torch.save(model, "model.pt")` this
+        can lead to problems when loading the model later on, as it will try to not only save the model weights but
+        also the model definition. This can lead to problems if you change the model definition later on (which you
+        most likely is going to do).
+
 3. Implement training and evaluation of your model in `main.py` script. The `main.py` script should be able to
     take an additional subcommands indicating if the model should train or evaluate. It will look something like this:
 
@@ -189,6 +197,45 @@ in the future as you start to add more and more features. As subgoals, please fu
     ```
 
     which can be implemented in various ways.
+
+    ??? example "VS code and command line arguments"
+
+        If you try to execute the above code in VS code using the debugger (F5) or the build in run functionality in the
+        upper right corner:
+
+        <figure markdown>
+        ![Image](../figures/vs_code_run.png){width="300"}
+        </figure>
+
+        you will get an error message saying that you need to select a command to run e.g. `main.py` either needs the
+        `train` or `evaluate` command. This can be fixed by adding a `lunch.json` to a specialized `.vscode` folder in
+        the root of the project. The `lunch.json` file should look something like this:
+
+        ```json
+        {
+            "version": "0.2.0",
+            "configurations": [
+                {
+                    "name": "Python: Current File",
+                    "type": "python",
+                    "request": "launch",
+                    "program": "${file}",
+                    "args": [
+                        "train",
+                        "--lr",
+                        "1e-4"
+                    ],
+                    "console": "integratedTerminal",
+                    "justMyCode": true
+                }
+            ]
+        }
+        ```
+
+        This will inform VS code that then we execute the current file (in this case `main.py`) we want to run it with
+        the `train` command and additionally pass the `--lr` argument with the value `1e-4`. You can read more about
+        creating a `lunch.json` file [here](https://code.visualstudio.com/docs/python/debugging). If you want to have
+        multiple configurations you can add them to the `configurations` list as additional dictionaries.
 
 To start you off, a very basic version of each script is provided in the `final_exercise` folder. We have already
 implemented some logic, especially to make sure you can easily run different subcommands in for step 4. If you are
