@@ -24,3 +24,5 @@ scipy
 dvc
 rich
 lightning
+pytest
+pytorch_lightning
