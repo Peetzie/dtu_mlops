@@ -1,9 +1,10 @@
 # Monitoring
 
+[Slides](../slides/Monitoring.pdf){ .md-button }
+
 <p align="center">
   <img src="../figures/icons/evidentlyai.png" width="130">
-  <img src="../figures/icons/signoz.png" width="130">
-  <img src="../figures/icons/opentelemetry.png" width="130">
+  <img src="../figures/icons/prometheus.png" width="130">
   <img src="../figures/icons/monitoring.png" width="130">
 </p>
 
