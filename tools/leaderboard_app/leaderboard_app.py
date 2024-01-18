@@ -65,16 +65,15 @@ def main():
     # remove columns that are not needed
     df1 = df[
         [
-            "group_nb",
-            "num_students",
-            "num_contributors",
-            "total_commits",
-            "num_commits_to_main",
-            "contributions_per_contributor",
-            "num_prs",
-            "average_commit_message_length_to_main",
-            "average_commit_message_length",
-            "latest_commit",
+            'group_nb',
+            'num_students',
+            'num_contributors',
+            'total_commits',
+            'contributions_per_contributor',
+            'num_prs',
+            'average_commit_message_length_to_main',
+            'average_commit_message_length',
+            'latest_commit',
         ]
     ]
 
@@ -107,16 +106,15 @@ def main():
     st.dataframe(
         df1,
         column_config={
-            "group_nb": "Group Number",
-            "num_students": "Students",
-            "num_contributors": "Contributors",
-            "total_commits": "Total Commits",
-            "num_commits_to_main": "Commits to main",
-            "contributions_per_contributor": st.column_config.BarChartColumn("Contributions distribution"),
-            "num_prs": "Number of Pull Requests",
-            "average_commit_message_length_to_main": "ACML* (main)",
-            "average_commit_message_length": "ACML* (all)",
-            "latest_commit": st.column_config.DatetimeColumn("Latest commit"),
+            'group_nb': 'Group Number',
+            'num_students': 'Students',
+            'num_contributors': 'Contributors',
+            'total_commits': 'Total Commits',
+            'contributions_per_contributor': st.column_config.BarChartColumn('Contributions distribution'),
+            'num_prs': 'Number of Pull Requests',
+            'average_commit_message_length_to_main': 'ACML* (main)',
+            'average_commit_message_length': 'ACML* (all)',
+            'latest_commit': st.column_config.DatetimeColumn('Latest commit'),
         },
         hide_index=True,
     )
